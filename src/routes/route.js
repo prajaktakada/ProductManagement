@@ -9,7 +9,7 @@ const usercontroller=require("../controllers/usercontroller")
  router.post('/registerUser',usercontroller.createuser)
  router.post('/login',usercontroller.login)
 router.get('/user/:userId/profile',Middleware.Auth,usercontroller.getUser)
- router.put('/user/:userId/profile',Middleware.Auth,usercontroller.update)
+ router.put('/user/:userId/profile',Middleware.Auth,usercontroller.UpdateUser)
 
 
 

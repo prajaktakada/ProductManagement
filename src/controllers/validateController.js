@@ -39,4 +39,4 @@ let isValidObjectId = function(ObjectId){
 }
 
 
-module.exports = {isValidRequestBody,validString ,isValid , isValidPhone, isValidObjectId,validatePIN}
+module.exports = {isValidRequestBody,validString ,isValid , isValidPhone, isValidObjectId,validatePIN}//

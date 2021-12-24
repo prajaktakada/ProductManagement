@@ -1,17 +1,21 @@
 
 
+
+
+
 const jwt = require("jsonwebtoken")
 
 const Auth = async function (req, res, next) {
     try {
 
-        let token = req.headers['x-api-key']
-        if (!token) {
+        let authHeader= req.headers['authorization']
+        if (!authHeader) {
             res.status(401).send({ status: false, Message: 'Mandatory authentication token is missing.' })
         } else {
-            let decodedtoken = jwt.verify(token, "Group9")
+           let tokenindex= authHeader && authHeader.split(' ')[1]//
+            let decodedtoken = jwt.verify(tokenindex,"Group9")
             if (decodedtoken) {
-                req.user = decodedtoken
+                req.user = decodedtoken.userId
                 // console.log(decodedtoken)
                 next()
             }

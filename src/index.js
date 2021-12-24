@@ -1,6 +1,6 @@
 const express = require('express');
 var bodyParser = require('body-parser');
-//
+
 const multer =require('multer')
 const route = require('./routes/route.js');
 
