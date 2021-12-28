@@ -1,8 +1,4 @@
 
-
-
-
-
 const jwt = require("jsonwebtoken")
 
 const Auth = async function (req, res, next) {
@@ -16,7 +12,7 @@ const Auth = async function (req, res, next) {
             let decodedtoken = jwt.verify(tokenindex,"Group9")
             if (decodedtoken) {
                 req.user = decodedtoken.userId
-                // console.log(decodedtoken)
+               
                 next()
             }
         }

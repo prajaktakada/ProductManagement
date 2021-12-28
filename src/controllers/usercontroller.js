@@ -18,17 +18,17 @@ const createuser = async function (req, res) {
             return
         }
 
-        //---
+      
         if(files && files.length > 0){
 
         var uploadedFileURL = await upload.uploadFile(files[0]);
-           // data.profileImage = uploadedFileURL;
+           
         }else{
             res.status(400).send({status:false,message:"nothing to write"})
         }
-//-----
+
         const {fname,lname, email, phone,password,address} = req.body
-           //const{profileImage} = files
+          
          
          if (!validator.isValid(fname)) {
             return res.status(400).send({ status: false, message: ' Please provide fname' })
@@ -36,11 +36,7 @@ const createuser = async function (req, res) {
         if (!validator.isValid(lname)) {
             return res.status(400).send({ status: false, message: ' Please provide lname' })
         }
-        //  console.log(req.files.profileImage)
-        // if (!validator.isValid(req.files.profileImage)) {
-        //     return res.status(400).send({ status: false, message: ' Please provide profileImage' })
-        // }
-
+       
         const isphoneAlreadyUsed = await userModel.findOne({ phone });
 
         if (isphoneAlreadyUsed) {
@@ -61,13 +57,13 @@ const createuser = async function (req, res) {
         }
 
         const userDetails= { fname,lname, email,profileImage:uploadedFileURL, phone,password, address  }
-//-------
+
            // generate salt to hash password
       const salt = await bcrypt.genSalt(10);
          // now we set user password to hashed password
 userDetails.password = await bcrypt.hash(userDetails.password, salt);
 
-       //
+       
         if(address){
             if(address.shipping){
 
@@ -166,8 +162,9 @@ const login = async function (req, res) {
 
                 const Token = jwt.sign({
                     userId: User._id,
-                    // iat: Math.floor(Date.now() / 1000), //issue date
-                    // exp: Math.floor(Date.now() / 1000) + 30 * 60
+                     
+              iat: Math.floor(Date.now() / 1000), //	The iat (issued at) identifies the time at which the JWT was issued. [Date.now() / 1000 => means it will give time that is in seconds(for January 1, 1970)] (abhi ka time de gha jab bhi yhe hit hugha)
+              exp: Math.floor(Date.now() / 1000) + 10 * 60 * 60 //The exp (expiration time) identifies the expiration time on or after which the token MUST NOT be accepted for processing.   (abhi ke time se 10 ganta tak jalee gha ) Date.now() / 1000=> seconds + 60x60min i.e 1hr and x10 gives 10hrs.
                 }, "Group9")
                 res.header('authorization', Token)
 
@@ -200,17 +197,17 @@ const getUser = async function (req, res) {
             return res.status(400).send({ status: false, message: 'Please provide valid userId' })
         }
 
-        // if(!(validator.isValidObjectId(decodedtokenUserId)&&validator.isValidObjectId(userId))){
-        //     return res.status(400).send({status:false,message:"wrong tonken or userid"})
-        // }
+        if (!validator.isValidObjectId(userId) && !isValidObjectId(decodedtokenUserId)) {
+            return res.status(404).send({ status: false, message: "userId or token is not valid" })
+        }
         const searchprofile = await userModel.findOne({ _id:userId})
         if (!searchprofile) {
             return res.status(404).send({ status: false, message: 'profile does not exist' })
         }
         
-        if (searchprofile._id != decodedtokenUserId.userId) {
-            return res.status(403).send({status: false,message: "Unauthorized access."})
-        } 
+        if (!decodedtokenUserId === userId) {
+            res.status(400).send({ status: false, message: "userId in url param and in token is not same" })
+        }
 
         const Data = await userModel.find({ _id: userId})
         return res.status(200).send({ status: true, message: 'user profile details', data: Data })
@@ -285,7 +282,7 @@ const getUser = async function (req, res) {
         requestBody.profileImage = uploadedFileURL
     };
 
-    //
+    
     if(requestBody.address){
         requestBody.address=JSON.parse(requestBody.address)
     if(requestBody.address.shipping)
@@ -345,92 +342,3 @@ module.exports.UpdateUser =UpdateUser
 
 
 
-
-//////
-/*
-const UpdateUser = async (req, res) => {
-
-    userId = req.params.userId;
-    const requestBody = req.body;
-    const profileImage = req.files
-    TokenDetail=req.user
-
-    if (!validate.isValidRequestBody(requestBody)) {
-        return res.status(400).send({ status: false, message: 'No paramateres passed. Book unmodified' })
-    }
-    const UserFound = await UserModel.findOne({ _id: userId})
-    
-
-    if (!UserFound) {
-        return res.status(404).send({ status: false, message: `User not found with given UserId` })
-    }
-    if (!TokenDetail === userId) {
-        res.status(400).send({ status: false, message: "userId in url param and in token is not same" })
-    }
-  
-// const {address}=requestBody.address
-// const address1=JSON.parse(requestBody.address[shipping])
-// if(address1)
-// {
-    
-//     UserFound.address[shipping][street]=requestBody.address1[shipping][street];
-//     await UserFound.save()
-// }
-
-const {fname,lname,email,phone,password}=requestBody
-   
-    if (Object.prototype.hasOwnProperty.call(requestBody, 'email')) {
-        if (!(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(requestBody.email))) {
-            res.status(400).send({ status: false, message: `Email should be a valid email address` })
-            return
-        };
-        if(Object.prototype.hasOwnProperty.call(requestBody,'address')){
-            if(Object.prototype.hasOwnProperty.call(address,'shipping')){
-                address.shipping.city=requestBody.address.shipping.city
-               
-            }
-        }
-
-        const isEmailAlreadyUsed = await UserModel.findOne({ email: requestBody.email });
-        if (isEmailAlreadyUsed) {
-            res.status(400).send({ status: false, message: `${requestBody.email} email address is already registered` })
-            return
-        };
-    }
-    console.log(Object.prototype.hasOwnProperty.call(requestBody, 'password'))
-    if (Object.prototype.hasOwnProperty.call(requestBody, 'password')) {
-        requestBody.password = requestBody.password.trim();
-        if (!(requestBody.password.length > 7 && requestBody.password.length < 16)) {
-            res.status(400).send({ status: false, message: "password should  between 8 and 15 characters" })
-            return
-        };
-
-        var salt = await bcrypt.genSalt(10);
-        password = await bcrypt.hash(requestBody.password, salt)
-        console.log(password)
-        requestBody.password = password;
-    }
-
-    requestBody.address=JSON.parse(requestBody.address)
-    if(requestBody.address.shipping)
-    {
-        UserFound.address.shipping=requestBody.address.shipping
-        await UserFound.save()
-    }
-
-    if(requestBody.address.billing)
-    {
-        UserFound.address.billing=requestBody.address.billing
-        await UserFound.save() 
-    }
-    requestBody.UpdatedAt = new Date()
-
-    const UpdateData={fname,lname,email,phone,password}
-
-    const upatedUser = await UserModel.findOneAndUpdate({ _id: userId }, UpdateData, { new: true })
-    res.status(200).send({ status: true, message: 'User updated successfully', data: upatedUser });
-
-
-
-}
-*/

@@ -39,4 +39,33 @@ let isValidObjectId = function(ObjectId){
 }
 
 
-module.exports = {isValidRequestBody,validString ,isValid , isValidPhone, isValidObjectId,validatePIN}//
+// const isValidavailableSizes = function (availableSizes) {
+//     ["S", "XS", "M", "X", "L", "XXL", "XL"].indexOf(availableSizes) !== -1
+//     return
+
+// }
+
+const isValidavailableSizes = function (value) {
+    let avilable = ["S", "XS", "M", "X", "L", "XXL", "XL"]
+    value = value.split(",")
+    for (let x of value) {
+        if (avilable.includes(x) == false) {
+            return false
+        }
+    }
+    return true;
+}
+
+
+
+
+const isValidNumber = function (value) {
+    if (typeof (value) === Number ) { return true } //if undefined or null occur rather than what we are expecting than this particular feild will be false.
+    // if (value.trim().length == 0) { return false } //if user give spaces not any string eg:- "  " =>here this value is empty, only space is there so after trim if it becomes empty than false will be given. 
+    // if (typeof (value) === 'string' && value.trim().length > 0) { return true } //to check only string is comming and after trim value should be their than only it will be true.
+}
+
+
+
+
+module.exports = {isValidRequestBody,validString ,isValid , isValidPhone, isValidObjectId,validatePIN,isValidavailableSizes,isValidNumber}//
