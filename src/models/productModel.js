@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema({
     productImage: { // s3 link
         type: String,
         required: true,
-        //trim: true
+      
     },
 
     style: {

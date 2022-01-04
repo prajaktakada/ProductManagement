@@ -177,7 +177,7 @@
     }
 }
 ```
-
+...
 Note: [Bcrypt](https://www.npmjs.com/package/bcrypt)
 Send [form-data](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
 

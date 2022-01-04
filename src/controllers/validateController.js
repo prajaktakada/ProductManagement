@@ -1,10 +1,17 @@
 const mongoose = require('mongoose')
 
+// const isValid = function (value) {
+//     if (typeof (value) === 'undefined' || typeof (value) === 'null') { return false } //if undefined or null occur rather than what we are expecting than this particular feild will be false.
+//     if (value.trim().length == 0) { return false } //if user give spaces not any string eg:- "  " =>here this value is empty, only space is there so after trim if it becomes empty than false will be given. 
+//     if (typeof (value) === 'string' && value.trim().length > 0) { return true } //to check only string is comming and after trim value should be their than only it will be true.
+// }
 const isValid = function (value) {
-    if (typeof (value) === 'undefined' || typeof (value) === 'null') { return false } //if undefined or null occur rather than what we are expecting than this particular feild will be false.
-    if (value.trim().length == 0) { return false } //if user give spaces not any string eg:- "  " =>here this value is empty, only space is there so after trim if it becomes empty than false will be given. 
-    if (typeof (value) === 'string' && value.trim().length > 0) { return true } //to check only string is comming and after trim value should be their than only it will be true.
+
+    if (typeof value === 'undefined'|| value === null) return false
+    if (typeof value === 'string' && value.trim().length === 0) return false
+    return true;
 }
+
 
 const validString = function(value) {
     if (typeof value === 'string' && value.trim().length === 0) return false //it checks whether the string contain only space or not 
@@ -39,12 +46,10 @@ let isValidObjectId = function(ObjectId){
 }
 
 
-// const isValidavailableSizes = function (availableSizes) {
-//     ["S", "XS", "M", "X", "L", "XXL", "XL"].indexOf(availableSizes) !== -1
-//     return
 
-// }
-
+const isValidStatus = function(title) {
+    return ['pending', 'completed', 'cancled'].indexOf(title) !== -1
+}
 const isValidavailableSizes = function (value) {
     let avilable = ["S", "XS", "M", "X", "L", "XXL", "XL"]
     value = value.split(",")
@@ -68,4 +73,4 @@ const isValidNumber = function (value) {
 
 
 
-module.exports = {isValidRequestBody,validString ,isValid , isValidPhone, isValidObjectId,validatePIN,isValidavailableSizes,isValidNumber}//
+module.exports = {isValidRequestBody,validString ,isValid , isValidPhone, isValidObjectId,validatePIN,isValidavailableSizes,isValidNumber,isValidStatus}//

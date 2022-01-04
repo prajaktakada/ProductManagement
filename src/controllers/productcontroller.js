@@ -21,14 +21,14 @@ const createproducts = async function (req, res) {
         if(files && files.length > 0){
           var uploadedFileURL = await upload.uploadFile(files[0]);
         }else{
-            res.status(400).send({status:false,message:"nothing to write"})
+            res.status(400).send({status:false,message:"please provide image "})
         }
 
         
 
         //const {title,description,price:Number(price).toFixed(2),currencyId,currencyFormat,style,availableSizes,installments} = req.body
           
-        const {title,description,price,currencyId,currencyFormat,style,availableSizes,installments} = req.body
+        var {title,description,price,currencyId,currencyFormat,style,availableSizes,installments} = req.body
 
 let availSiz = JSON.parse(availableSizes)
 
@@ -45,17 +45,23 @@ let availSiz = JSON.parse(availableSizes)
         if (!validator.isValid(description)) {
             return res.status(400).send({status:false, message:'Please provide description' })
         }
+//
+        currencyId = currencyId.toUpperCase().trim()
 
         if (!validator.isValid(currencyId)) {
             return res.status(400).send({ status: false, message:'Please provide currencyId' })
         }
 
         if (currencyId !== 'INR') {
-            res.status(400).send({ status: false, message: 'provide valid currencyId' })
+            res.status(400).send({ status: false, message: 'provide valid INR currencyId' })
             return
 
         }
       
+
+        //price = parseFloat(price).toFixed(2)  //12.00 value store karega
+        
+
         if (!validator.isValid(price)) {
             return res.status(400).send({ status: false, message: ' Please provide price' })
         }
@@ -87,7 +93,7 @@ let availSiz = JSON.parse(availableSizes)
 
         res.status(201).send({ status: true, message: "product created successfully", data: saveduser });
 
-} catch (err) {
+} catch(err) {
         console.log(err)
         res.status(500).send({ status: false, msg:err.message })
     }
@@ -96,7 +102,6 @@ let availSiz = JSON.parse(availableSizes)
 
 
 //GET /products
-
 const getProduct = async function(req,res){
     try{
 
@@ -160,6 +165,7 @@ const getproductById = async (req, res) => {
     }
 }
 
+
 //PUT /products/:productId
 const updateProduct = async function (req, res) {
     try {
@@ -169,7 +175,7 @@ const updateProduct = async function (req, res) {
         const productImage = req.files
 
         if (!validator.isValidRequestBody(requestBody)) {
-            return res.status(400).send({ status: false, message: 'No paramateres passed. Book unmodified' })
+            return res.status(400).send({ status: false, message: 'please provide valid request body' })
         }
 
         let productDetails = await productModel.findOne({ _id: req.params.productId })
@@ -184,10 +190,10 @@ const updateProduct = async function (req, res) {
 
         if (productDetails.isDeleted === false) {
 
-            if(!validator.isValid(title)){
-                res.status(400).send({status: false, message: "please enter valid title"})
-                return
-            }
+            // if(!validator.isValid(title)){
+            //     res.status(400).send({status: false, message: "please enter valid title"})
+            //     return
+            // }
 
             const istitleAlreadyUsed = await productModel.findOne({ title });
 
@@ -208,7 +214,7 @@ const updateProduct = async function (req, res) {
         const productValue = { title, description, price,isFreeShipping, currencyId, currencyFormat, productImage: uploadedFileURL, style, availableSizes, installments }
 
         const upatedProduct = await productModel.findOneAndUpdate({ _id: productId }, productValue, { new: true })
-        res.status(200).send({ status: true, message: 'User updated successfully', data: upatedProduct });
+        res.status(200).send({ status: true, message: 'product updated successfully', data: upatedProduct });
 
 
     } catch (err) {
