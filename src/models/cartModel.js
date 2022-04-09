@@ -21,12 +21,12 @@ const cartSchema = new mongoose.Schema({
     }],
     totalPrice: {
         type:Number,
-        required:"email required",
+        required:true,
         comment:String
     },
     totalItems: {
         type:Number,
-        required:"email required",
+        required:true,
         comment:String
     }
   
