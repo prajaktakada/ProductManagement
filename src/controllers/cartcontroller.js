@@ -7,115 +7,6 @@ let validator = require('../controllers/validateController')
 let cartModel = require('../models/cartModel.js')
 const jwt = require("jsonwebtoken")
 
- 
-// //
-// const createCart = async function (req, res) {
-//     try{
-//         let userId= req.params.userId
-//         let decodedtokenUserId=req.user
-//         let cart = req.body
-      
-//         if (!validator.isValidRequestBody(cart)) {
-//             res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide user details' })
-//             return
-//         }
-
-//     if (!decodedtokenUserId === userId) {
-//         res.status(400).send({ status: false, message: "userId in url param and in token is not same" })
-//     }
-
-
-//     if (!(validator.isValid(userId))) {
-//         return res.status(400).send({ status: false, message: 'Please provide valid userId' })
-//     }
-    
-//     let cartAlreadyCreatedForUser = await cartModel.findOne({userId:userId})
-
-//     // if(cartAlreadyCreatedForUser){
-//     //     res.status(400).send({status:false,message:'not allow to create multiple carts'})
-//     // }
-   
-
-//     const {items,totalPrice,totalItems} = req.body
-
-//     // if (!validator.isValid(items)) {
-//     //     return res.status(400).send({ status: false, message:'Please provide items' })
-//     // }
-//     // if (!validator.isValid(totalPrice)) {
-//     //     return res.status(400).send({ status: false, message:'Please provide totalPrice' })
-//     // }
-//     // if (!validator.isValid(totalItems)) {
-//     //     return res.status(400).send({status:false, message:'Please provide items' })
-//     // }
-    
-     
-//      let cartDetails= {userId,items,totalPrice:totalPrice,totalItems:totalItems}
-//    if(items){
-//         if('items.productId'){
-//         if (!validator.validString(items.productId)) {
-//                     return res.status(400).send({ status: false, message: ' Please provide productId' })
-//                 }
-//                 cartDetails[items.productId]=items.productId
-//             }
-//             if('items.quantity'){
-//                 if (!validator.validString(items.quantity)) {
-//                     return res.status(400).send({ status: false, message: ' Please provide quantity' })
-//                 }
-//                 cartDetails[items.quantity]=items.quantity
-//             }
-//         }
-        
-    
-//     let userExit = await userModel.findById({_id: userId})
-//    // console.log(userExit)
-//     if(!userExit){
-//         return res.status(404).send({ status: false, message: 'user does not exist' })
-//     }
-    
-//       let cartChecking = await cartModel.findOne({_id:userId})  
-//       //console.log(cartChecking)
-//       if(!cartChecking){
-//         let cart= req.body
-//         let  totalPrice=0
-//         let totalItems = cart.items.length
-//        // console.log(totalItems)
-//         for (let i=0; i<totalItems ; i++) {
-//         let demo = await productModel.findOne({_id:(cart.items[i].productId), isDeleted:false})
-//        // console.log(demo)
-    
-//         totalPrice= totalPrice + (demo.price)* cart.items[i].quantity   
-//         //console.log(totalPrice)
-       
-//        cart.totalItems = totalItems
-//       // console.log(totalItems)
-//        cart.totalPrice = totalPrice
-//        //console.log(totalPrice)
-// //------
-// if(cartAlreadyCreatedForUser){
-//     let totalPrize = cartAlreadyCreatedForUser.totalPrice + totalPrice
-//     let totalItez = cartAlreadyCreatedForUser.totalItems + 1
-//     const cartdetail = await cartModel.findOneAndUpdate({ userId:cartAlreadyCreatedForUser.userId },{ $addToSet: { items: { $each: items } },totalPrice:totalPrize ,totalItems:totalItez},{ new: true })
-//     return res.status(200).send({ status: true, msg: "successfully updated", data:cartdetail  })
-// }else{
-
-   
-//        let savedcart = await cartModel.create({userId,items,totalPrice:totalPrice,totalItems:totalItems});
-//        console.log(savedcart)
-//        res.status(201).send({ status: true, message: "cart created successfully", data: savedcart });  
-   
-// }
-
-//     }
-// }
-               
-// }catch (err) {
-// res.status(500).send({ status: false, msg:err.message })
-// }
-// }
-
-// module.exports.createCart= createCart
-////
-
 
 //POST /users/:userId/cart (Add to cart)
 const createCart = async (req, res) => {
@@ -372,3 +263,112 @@ const updateCart = async (req, res) => {
 
 
 module.exports = {createCart,getCart,deleteCart,updateCart}
+
+
+// //
+// const createCart = async function (req, res) {
+//     try{
+//         let userId= req.params.userId
+//         let decodedtokenUserId=req.user
+//         let cart = req.body
+      
+//         if (!validator.isValidRequestBody(cart)) {
+//             res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide user details' })
+//             return
+//         }
+
+//     if (!decodedtokenUserId === userId) {
+//         res.status(400).send({ status: false, message: "userId in url param and in token is not same" })
+//     }
+
+
+//     if (!(validator.isValid(userId))) {
+//         return res.status(400).send({ status: false, message: 'Please provide valid userId' })
+//     }
+    
+//     let cartAlreadyCreatedForUser = await cartModel.findOne({userId:userId})
+
+//     // if(cartAlreadyCreatedForUser){
+//     //     res.status(400).send({status:false,message:'not allow to create multiple carts'})
+//     // }
+   
+
+//     const {items,totalPrice,totalItems} = req.body
+
+//     // if (!validator.isValid(items)) {
+//     //     return res.status(400).send({ status: false, message:'Please provide items' })
+//     // }
+//     // if (!validator.isValid(totalPrice)) {
+//     //     return res.status(400).send({ status: false, message:'Please provide totalPrice' })
+//     // }
+//     // if (!validator.isValid(totalItems)) {
+//     //     return res.status(400).send({status:false, message:'Please provide items' })
+//     // }
+    
+     
+//      let cartDetails= {userId,items,totalPrice:totalPrice,totalItems:totalItems}
+//    if(items){
+//         if('items.productId'){
+//         if (!validator.validString(items.productId)) {
+//                     return res.status(400).send({ status: false, message: ' Please provide productId' })
+//                 }
+//                 cartDetails[items.productId]=items.productId
+//             }
+//             if('items.quantity'){
+//                 if (!validator.validString(items.quantity)) {
+//                     return res.status(400).send({ status: false, message: ' Please provide quantity' })
+//                 }
+//                 cartDetails[items.quantity]=items.quantity
+//             }
+//         }
+        
+    
+//     let userExit = await userModel.findById({_id: userId})
+//    // console.log(userExit)
+//     if(!userExit){
+//         return res.status(404).send({ status: false, message: 'user does not exist' })
+//     }
+    
+//       let cartChecking = await cartModel.findOne({_id:userId})  
+//       //console.log(cartChecking)
+//       if(!cartChecking){
+//         let cart= req.body
+//         let  totalPrice=0
+//         let totalItems = cart.items.length
+//        // console.log(totalItems)
+//         for (let i=0; i<totalItems ; i++) {
+//         let demo = await productModel.findOne({_id:(cart.items[i].productId), isDeleted:false})
+//        // console.log(demo)
+    
+//         totalPrice= totalPrice + (demo.price)* cart.items[i].quantity   
+//         //console.log(totalPrice)
+       
+//        cart.totalItems = totalItems
+//       // console.log(totalItems)
+//        cart.totalPrice = totalPrice
+//        //console.log(totalPrice)
+// //------
+// if(cartAlreadyCreatedForUser){
+//     let totalPrize = cartAlreadyCreatedForUser.totalPrice + totalPrice
+//     let totalItez = cartAlreadyCreatedForUser.totalItems + 1
+//     const cartdetail = await cartModel.findOneAndUpdate({ userId:cartAlreadyCreatedForUser.userId },{ $addToSet: { items: { $each: items } },totalPrice:totalPrize ,totalItems:totalItez},{ new: true })
+//     return res.status(200).send({ status: true, msg: "successfully updated", data:cartdetail  })
+// }else{
+
+   
+//        let savedcart = await cartModel.create({userId,items,totalPrice:totalPrice,totalItems:totalItems});
+//        console.log(savedcart)
+//        res.status(201).send({ status: true, message: "cart created successfully", data: savedcart });  
+   
+// }
+
+//     }
+// }
+               
+// }catch (err) {
+// res.status(500).send({ status: false, msg:err.message })
+// }
+// }
+
+// module.exports.createCart= createCart
+////
